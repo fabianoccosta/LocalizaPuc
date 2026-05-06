@@ -7,7 +7,7 @@
         * { box-sizing: border-box; }
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
 
-        /* Área do Mapa */
+       
         #mapa-container {
             flex: 2;
             background-color: #ddd; /* Representando o mapa */
@@ -17,7 +17,7 @@
             justify-content: center;
         }
 
-        /* Simulação de ícones no mapa */
+        
         .pin {
             position: absolute;
             width: 30px;
@@ -29,7 +29,7 @@
             border: 2px solid white;
         }
 
-        /* Painel Lateral */
+       
         #detalhes {
             flex: 1;
             padding: 20px;
@@ -43,10 +43,10 @@
 <body>
 
     <div id="mapa-container">
-        <!-- Espaço para imagem de fundo ou mapa real depois -->
+        
         <p style="color: #666;">[Espaço do Mapa / Imagem]</p>
 
-        <!-- Exemplo de Marcadores posicionados manualmente -->
+       
         <div class="pin" style="top: 30%; left: 40%;" onclick="mostrar('Restaurante 1', 'Descrição curta aqui.')"></div>
         <div class="pin" style="top: 60%; left: 70%;" onclick="mostrar('Lanchonete 2', 'Outra descrição aqui.')"></div>
     </div>
