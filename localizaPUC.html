@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Localiza Restaurantes PUC</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+
+        /* Área do Mapa */
+        #mapa-container {
+            flex: 2;
+            background-color: #ddd; /* Representando o mapa */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Simulação de ícones no mapa */
+        .pin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: red;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        /* Painel Lateral */
+        #detalhes {
+            flex: 1;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 1px solid #ccc;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="mapa-container">
+        <!-- Espaço para imagem de fundo ou mapa real depois -->
+        <p style="color: #666;">[Espaço do Mapa / Imagem]</p>
+
+        <!-- Exemplo de Marcadores posicionados manualmente -->
+        <div class="pin" style="top: 30%; left: 40%;" onclick="mostrar('Restaurante 1', 'Descrição curta aqui.')"></div>
+        <div class="pin" style="top: 60%; left: 70%;" onclick="mostrar('Lanchonete 2', 'Outra descrição aqui.')"></div>
+    </div>
+
+    <div id="detalhes">
+        <h2>Detalhes</h2>
+        <div id="conteudo-vazio">Clique em um ponto do mapa</div>
+        
+        <div id="info-local" class="hidden">
+            <h3 id="nome-local"></h3>
+            <p id="desc-local"></p>
+            <button onclick="fechar()">Fechar</button>
+        </div>
+    </div>
+
+    <script>
+        function mostrar(nome, desc) {
+            document.getElementById('conteudo-vazio').classList.add('hidden');
+            document.getElementById('info-local').classList.remove('hidden');
+            
+            document.getElementById('nome-local').innerText = nome;
+            document.getElementById('desc-local').innerText = desc;
+        }
+
+        function fechar() {
+            document.getElementById('conteudo-vazio').classList.remove('hidden');
+            document.getElementById('info-local').classList.add('hidden');
+        }
+    </script>
+
+</body>
+</html>
