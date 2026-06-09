@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Localiza PUC — Entrar</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      background: #f0f4f8;
+    }
+
+    /* Left panel — map accent */
+    .brand-panel {
+      width: 42%;
+      background: #1a2d4e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 30% 70%, rgba(76,175,80,0.15) 0%, transparent 55%),
+        radial-gradient(circle at 75% 25%, rgba(76,175,80,0.10) 0%, transparent 45%);
+    }
+
+    .brand-logo {
+      position: relative;
+      text-align: center;
+    }
+
+    .brand-logo .icon {
+      width: 64px;
+      height: 64px;
+      background: #4caf50;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      margin: 0 auto 28px;
+      box-shadow: 0 8px 24px rgba(76,175,80,0.4);
+    }
+
+    .brand-logo h1 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .brand-logo p {
+      color: rgba(255,255,255,0.55);
+      font-size: 14px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    /* Right panel — form */
+    .form-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 32px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tab.active {
+      color: #1a2d4e;
+      border-bottom-color: #4caf50;
+    }
+
+    .form-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a2d4e;
+      margin-bottom: 6px;
+    }
+
+    .form-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #1e293b;
+      background: #fff;
+      margin-bottom: 18px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 3px rgba(76,175,80,0.15);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: #1a2d4e;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-primary:hover { background: #243d6a; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .error-msg {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .brand-panel { display: none; }
+      .form-panel { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-panel">
+    <div class="brand-logo">
+      <div class="icon"></div>
+      <h1>Localiza PUC</h1>
+      <p>Encontre restaurantes e cantinas<br>dentro do campus.</p>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <div class="card">
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('login')">Entrar</div>
+        <div class="tab" onclick="switchTab('register')">Criar conta</div>
+      </div>
+
+      <div id="error-msg" class="error-msg"></div>
+
+      <!-- Login form -->
+      <div id="form-login">
+        <div class="form-title">Bem-vindo de volta</div>
+        <div class="form-subtitle">Entre para ver e avaliar os locais.</div>
+
+        <label for="login-username">Usuário</label>
+        <input type="text" id="login-username" placeholder="seu.usuario" autocomplete="username">
+
+        <label for="login-password">Senha</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+
+        <button class="btn-primary" onclick="login()">Entrar</button>
+      </div>
+
+      <!-- Register form -->
+      <div id="form-register" style="display:none">
+        <div class="form-title">Criar conta</div>
+        <div class="form-subtitle">Escolha um nome de usuário e senha.</div>
+
+        <label for="reg-username">Usuário</label>
+        <input type="text" id="reg-username" placeholder="seu.usuario" autocomplete="username">
+
+        <label for="reg-password">Senha</label>
+        <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password">
+
+        <button class="btn-primary" onclick="register()">Criar conta</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Redirect if already logged in
+    if (localStorage.getItem('token')) {
+      window.location.href = 'index.html';
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach((el, i) => {
+        el.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1));
+      });
+      document.getElementById('form-login').style.display   = tab === 'login'    ? '' : 'none';
+      document.getElementById('form-register').style.display = tab === 'register' ? '' : 'none';
+      hideError();
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    function hideError() {
+      document.getElementById('error-msg').classList.remove('visible');
+    }
+
+    async function login() {
+      hideError();
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!username || !password) return showError('Preencha todos os campos.');
+
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError(data.error);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('username', data.username);
+      window.location.href = 'index.html';
+    }
+
+    async function register() {
+      hideError();
+      const username = document.getElementById('reg-username').value.trim();
+      const password = document.getElementById('reg-password').value;
+      if (!username || !password) return showError('Preencha todos os campos.');
+
+      const res = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError(data.error);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('username', data.username);
+      window.location.href = 'index.html';
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const loginVisible = document.getElementById('form-login').style.display !== 'none';
+      loginVisible ? login() : register();
+    });
+  </script>
+
+</body>
+</html>
