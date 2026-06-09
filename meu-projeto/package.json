@@ -1,12 +1,13 @@
 {
-    "name": "localiza-puc-back",
-    "version": "1.0.0",
-    "description": "Servidor para o Localiza Restaurantes PUC",
-    "main": "server.js",
-    "scripts": {
-      "start": "node server.js"
-    },
-    "dependencies": {
-      "express": "^4.19.2"
-    }
+  "name": "localiza-puc-back",
+  "version": "1.0.0",
+  "description": "Servidor para o Localiza Restaurantes PUC",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "express": "^4.19.2"
   }
+}
