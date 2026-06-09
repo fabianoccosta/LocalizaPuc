@@ -5,7 +5,64 @@
     <title>Localiza Restaurantes PUC</title>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+
+        /* ── Top bar ── */
+        #topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 48px;
+            background: #1a2d4e;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        #topbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        #topbar .pin-icon {
+            width: 18px;
+            height: 18px;
+            background: #4caf50;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            flex-shrink: 0;
+        }
+
+        #topbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        #topbar button {
+            padding: 5px 14px;
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #topbar button:hover { background: rgba(255,255,255,0.1); }
+
+        /* ── Main content ── */
+        #main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
 
         #mapa-container {
             flex: 2;
@@ -15,9 +72,6 @@
             background-repeat: no-repeat;
             background-position: center;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
         }
 
@@ -41,14 +95,15 @@
 
         #detalhes {
             flex: 1;
-            padding: 20px;
+            padding: 24px 20px;
             background: #f9f9f9;
             border-left: 1px solid #ccc;
+            overflow-y: auto;
         }
 
         .hidden { display: none; }
-        
-        button {
+
+        button.close-btn {
             padding: 8px 15px;
             background: #444;
             color: white;
@@ -58,10 +113,8 @@
             margin-top: 10px;
         }
 
-        .rating-container {
-            margin: 15px 0;
-        }
-        
+        .rating-container { margin: 15px 0; }
+
         .stars {
             display: inline-flex;
             flex-direction: row-reverse;
@@ -89,93 +142,160 @@
             color: #555;
             margin-bottom: 5px;
         }
+
+        .vote-feedback {
+            font-size: 13px;
+            color: #4caf50;
+            margin-top: 6px;
+            min-height: 20px;
+        }
+
+        .loading {
+            font-size: 13px;
+            color: #94a3b8;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
 
-    <div id="mapa-container">
-        <div class="pin" style="top: 35%; left: 45%;" onclick="mostrarLocal('restaurante')"></div>
-        <div class="pin" style="top: 60%; left: 30%;" onclick="mostrarLocal('cantina')"></div>
+    <div id="topbar">
+        <div class="logo">
+            <div class="pin-icon"></div>
+            Localiza PUC
+        </div>
+        <div class="user-info">
+            <span id="topbar-username"></span>
+            <button onclick="logout()">Sair</button>
+        </div>
     </div>
 
-    <div id="detalhes">
-        <h2>Detalhes</h2>
-        <div id="conteudo-vazio">Clique em um ponto do mapa</div>
-        
-        <div id="info-local" class="hidden">
-            <h3 id="nome-local"></h3>
-            <p id="desc-local"></p>
-            
-            <hr>
-            
-            <div class="rating-container">
-                <div class="media-nota" id="media-exibicao">Média: 0.0 (0 avaliações)</div>
-                
-                <p style="margin: 5px 0;">Sua avaliação:</p>
-                <div class="stars">
-                    <input type="radio" id="star5" name="rating" value="5" onclick="votar(5)"><label for="star5">★</label>
-                    <input type="radio" id="star4" name="rating" value="4" onclick="votar(4)"><label for="star4">★</label>
-                    <input type="radio" id="star3" name="rating" value="3" onclick="votar(3)"><label for="star3">★</label>
-                    <input type="radio" id="star2" name="rating" value="2" onclick="votar(2)"><label for="star2">★</label>
-                    <input type="radio" id="star1" name="rating" value="1" onclick="votar(1)"><label for="star1">★</label>
-                </div>
-            </div>
+    <div id="main">
+        <div id="mapa-container">
+            <div class="pin" style="top: 35%; left: 45%;" onclick="mostrarLocal('restaurante')"></div>
+            <div class="pin" style="top: 60%; left: 30%;" onclick="mostrarLocal('cantina')"></div>
+        </div>
 
-            <button onclick="fechar()">Fechar</button>
+        <div id="detalhes">
+            <h2>Detalhes</h2>
+            <div id="conteudo-vazio">Clique em um ponto do mapa</div>
+
+            <div id="info-local" class="hidden">
+                <h3 id="nome-local"></h3>
+                <p id="desc-local"></p>
+
+                <hr style="margin: 16px 0;">
+
+                <div class="rating-container">
+                    <div class="media-nota loading" id="media-exibicao">Carregando…</div>
+
+                    <p style="margin: 10px 0 5px;">Sua avaliação:</p>
+                    <div class="stars">
+                        <input type="radio" id="star5" name="rating" value="5"><label for="star5" onclick="votar(5)">★</label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" onclick="votar(4)">★</label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" onclick="votar(3)">★</label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" onclick="votar(2)">★</label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" onclick="votar(1)">★</label>
+                    </div>
+                    <div class="vote-feedback" id="vote-feedback"></div>
+                </div>
+
+                <button class="close-btn" onclick="fechar()">Fechar</button>
+            </div>
         </div>
     </div>
 
     <script>
+        // ── Auth guard ───────────────────────────────────────────────────────
+        const token    = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+
+        if (!token) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('topbar-username').textContent = username;
+        }
+
+        async function logout() {
+            await fetch('/logout', { method: 'POST', headers: { 'x-auth-token': token } });
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
+
+        // ── Local data (static info only — ratings come from backend) ────────
         const locais = {
-            restaurante: {
-                nome: "Restaurante",
-                desc: "Pratos executivos e self-service.",
-                votos: [5, 4, 4]
-            },
-            cantina: {
-                nome: "Cantina",
-                desc: "Salgados, cafés e lanches.",
-                votos: [5, 5, 3]
-            }
+            restaurante: { nome: 'Restaurante', desc: 'Pratos executivos e self-service.' },
+            cantina:     { nome: 'Cantina',     desc: 'Salgados, cafés e lanches.' }
         };
 
         let localAtivo = null;
 
-        function calcularMedia(votos) {
-            if (votos.length === 0) return { media: "0.0", total: 0 };
-            const soma = votos.reduce((acc, nota) => acc + nota, 0);
-            const media = (soma / votos.length).toFixed(1);
-            return { media: media, total: votos.length };
-        }
-
-        function mostrarLocal(id) {
+        // ── Show location ────────────────────────────────────────────────────
+        async function mostrarLocal(id) {
             localAtivo = id;
             const dados = locais[id];
 
             document.getElementById('conteudo-vazio').classList.add('hidden');
             document.getElementById('info-local').classList.remove('hidden');
-            document.getElementById('nome-local').innerText = dados.nome;
-            document.getElementById('desc-local').innerText = dados.desc;
+            document.getElementById('nome-local').textContent = dados.nome;
+            document.getElementById('desc-local').textContent = dados.desc;
+            document.getElementById('vote-feedback').textContent = '';
 
-            atualizarPlacarMedia();
+            const mediaEl = document.getElementById('media-exibicao');
+            mediaEl.textContent = 'Carregando…';
+            mediaEl.className = 'media-nota loading';
 
-            const estrelas = document.getElementsByName('rating');
-            estrelas.forEach(estrela => estrela.checked = false);
+            // Reset stars
+            document.getElementsByName('rating').forEach(r => r.checked = false);
+
+            // Fetch reviews from backend
+            try {
+                const res = await fetch(`/reviews/${id}`);
+                const reviews = await res.json();
+
+                if (reviews.length === 0) {
+                    mediaEl.textContent = 'Sem avaliações ainda.';
+                } else {
+                    const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+                    mediaEl.textContent = `Média: ${avg} ★ (${reviews.length} avaliações)`;
+                }
+                mediaEl.className = 'media-nota';
+            } catch {
+                mediaEl.textContent = 'Erro ao carregar avaliações.';
+                mediaEl.className = 'media-nota';
+            }
         }
 
-        function votar(nota) {
+        // ── Vote ─────────────────────────────────────────────────────────────
+        async function votar(nota) {
             if (!localAtivo) return;
 
-            locais[localAtivo].votos.push(nota);
-            atualizarPlacarMedia();
-            
-            alert(`Obrigado pelo seu voto !: ${nota} estrelas!`);
-        }
+            const feedbackEl = document.getElementById('vote-feedback');
+            feedbackEl.textContent = 'Enviando…';
 
-        function atualizarPlacarMedia() {
-            const dados = locais[localAtivo];
-            const resultado = calcularMedia(dados.votos);
-            document.getElementById('media-exibicao').innerText = `Média: ${resultado.media} ★ (${resultado.total} avaliações)`;
+            try {
+                const res = await fetch('/reviews', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': token
+                    },
+                    body: JSON.stringify({ localId: localAtivo, rating: nota })
+                });
+
+                if (res.status === 401) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const data = await res.json();
+                document.getElementById('media-exibicao').textContent =
+                    `Média: ${data.media} ★ (${data.total} avaliações)`;
+                feedbackEl.textContent = `Voto de ${nota} ★ registrado!`;
+            } catch {
+                feedbackEl.textContent = 'Erro ao enviar voto.';
+            }
         }
 
         function fechar() {
