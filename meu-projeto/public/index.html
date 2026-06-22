@@ -75,22 +75,17 @@
             overflow: hidden;
         }
 
-        .pin {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: #e74c3c;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
+       .pin {
+         position: absolute;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        transform: translate(-50%, -50%);
         }
 
         .pin:hover {
-            transform: rotate(-45deg) scale(1.2);
-            background: #c0392b;
+        transform: translate(-50%, -50%) scale(1.2);
         }
 
         #detalhes {
@@ -99,6 +94,7 @@
             background: #f9f9f9;
             border-left: 1px solid #ccc;
             overflow-y: auto;
+            text-align: center;
         }
 
         .hidden { display: none; }
@@ -172,13 +168,35 @@
 
     <div id="main">
         <div id="mapa-container">
-            <div class="pin" style="top: 35%; left: 45%;" onclick="mostrarLocal('restaurante')"></div>
-            <div class="pin" style="top: 60%; left: 30%;" onclick="mostrarLocal('cantina')"></div>
+           <img class="pin" src="Foodpin.svg"  style="top:51.9%; left:28.3%;" onclick="mostrarLocal('couve_flor')">
+
+            <img class="pin" src="Snackpin.svg" style="top:37.6%; left:56.2%;" onclick="mostrarLocal('porto_do_sabor')">
+
+            <img class="pin" src="Snackpin.svg" style="top:40.6%; left:56.2%;" onclick="mostrarLocal('restaurante')">
+
+            <img class="pin" src="Foodpin.svg"  style="top:47.1%; left:68.5%;" onclick="mostrarLocal('Bandejão')">
+
+            <img class="pin" src="Foodpin.svg"  style="top:66.7%; left:39.9%;" onclick="mostrarLocal('na_medida')">
+
+            <img class="pin" src="Snackpin.svg" style="top:65.0%; left:48.9%;" onclick="mostrarLocal('Megamate')">
+
+            <img class="pin" src="Snackpin.svg" style="top:66.0%; left:57.2%;" onclick="mostrarLocal('Lemax')">
+
+            <img class="pin" src="Snackpin.svg"  style="top:63.2%; left:62.1%;" onclick="mostrarLocal('af_puc')">
+
+            <img class="pin" src="Snackpin.svg" style="top:66.7%; left:66.0%;" onclick="mostrarLocal('General')">
+
+            <img class="pin" src="Snackpin.svg"  style="top:35.1%; left:56.2%;" onclick="mostrarLocal('Casa_da_empada')">
+
+            <img class="pin" src="Foodpin.svg" style="top:65.4%; left:52.9%;" onclick="mostrarLocal('Bar_das_Freiras')">
+
+            <img class="pin" src="Snackpin.svg"  style="top:45.1%; left:62.2%;" onclick="mostrarLocal('Fastway')">
+           
         </div>
 
         <div id="detalhes">
-            <h2>Detalhes</h2>
-            <div id="conteudo-vazio">Clique em um ponto do mapa</div>
+            <h2>Detalhes dos restaurantes</h2>
+            <div id="conteudo-vazio">Selecione um ponto no mapa para ter<br> acesso aos detalhes.</div>
 
             <div id="info-local" class="hidden">
                 <h3 id="nome-local"></h3>
@@ -226,7 +244,17 @@
         // ── Local data (static info only — ratings come from backend) ────────
         const locais = {
             restaurante: { nome: 'Restaurante', desc: 'Pratos executivos e self-service.' },
-            cantina:     { nome: 'Cantina',     desc: 'Salgados, cafés e lanches.' }
+            porto_do_sabor:     { nome: 'Porto do Sabor',     desc: 'Salgados, cafés e lanches.' },
+            couve_flor:  { nome: 'Couve Flor',  desc: 'Salgados, cafés e lanches.' },
+            af_puc:      { nome: 'AF PUC',      desc: 'Pratos executivos e self-service.' },
+            Lemax:   { nome: 'Lemax',    desc: 'Pizzas e massas no campus.' },
+            Fastway:    { nome: 'Fastway',     desc: 'Cafés, sucos e lanches leves.' },
+            Bandejão:     { nome: 'Bandejão',      desc: 'Salgados e refeições rápidas.' },
+            Megamate:     { nome: 'Megamate',      desc: 'Comida natural e vegetariana.' },
+            Bar_das_Freiras:         { nome: 'Bar das Freiras',          desc: 'Lanches e porções.' },
+            Casa_da_empada:       { nome: 'Casa da Empada',        desc: 'Salgados, cafés e lanches.' },
+            General:    { nome: 'General',     desc: 'Pratos executivos e self-service.' },
+            na_medida:       { nome: 'Na Medida',        desc: 'Refeições completas e sucos.' },
         };
 
         let localAtivo = null;
